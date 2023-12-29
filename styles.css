@@ -18,3 +18,26 @@ body {
   justify-content: space-around;
   align-items: center;
 }
+
+.column h2 {
+  padding: 10px;
+  color: black;
+  border-radius: 25px;
+  transition: background 1s;
+}
+
+.column h2:hover {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.column button {
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  color: black;
+}
+
+.column button:hover {
+  cursor: pointer;
+}
