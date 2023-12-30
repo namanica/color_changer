@@ -6,6 +6,10 @@ document.addEventListener('keydown', event => {
   }
 })
 
+document.addEventListener('click', event => {
+  
+})
+
 function GenerateRandomColor() {
   const codes = '123456789ABCDEF';
   let color = '';
