@@ -25,7 +25,7 @@ function GenerateRandomColor() {
   const codes = '123456789ABCDEF';
   let color = '';
   for (let i = 0; i < 6; i++) {
-    color += codes[Math.floor(Math.random() * codes.length)]
+    color += codes[Math.floor(Math.random() * codes.length)];
   }
   return '#' + color;
 }
