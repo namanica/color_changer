@@ -30,10 +30,9 @@ function GenerateRandomColor() {
   return '#' + color;
 }
 
-
+const colors = [];
 
 function SetRandomColors() {
-  let colors = [];
   columns.forEach((column) => {
     const isLocked = column.querySelector('i').classList.contains('fa-lock');
     const colorName = column.querySelector('h2');
@@ -43,8 +42,7 @@ function SetRandomColors() {
     if (isLocked) {
       colors.push(colorName.textContent);
       return;
-    }
-    colors.push(generatedColor);
+    } else colors.push(generatedColor);
 
     colorName.textContent = generatedColor;
     column.style.background = generatedColor;
@@ -73,7 +71,7 @@ function UpdateColorsHash() {
 
 function GetColorsFromHash() {
   if (document.location.hash.length > 1) {
-    return document.location.hash.substring(1).split('-').map((colorName) => { '#' + colorName});
+    return document.location.hash.substring(1).split('-').map((generatedColor) => { '#' + generatedColor});
   }
   return [];
 }
