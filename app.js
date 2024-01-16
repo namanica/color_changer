@@ -6,7 +6,7 @@ document.addEventListener('keydown', event => {
 });
 
 document.addEventListener('click', event => {
-  const {type} = event.target.dataset.type;
+  const {type} = event.target.dataset;
 
   if (type === 'lock') {
     const node = event.target.tagName.toLowerCase() === 'i' ? event.target : event.target.children[0];
