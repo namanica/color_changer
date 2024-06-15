@@ -1,54 +1,68 @@
 const columns = document.querySelectorAll('.column');
 
-document.addEventListener('keydown', event => {
+document.addEventListener('keydown', (event) => {
   event.preventDefault();
-  if (event.code.toLowerCase() === 'space') setRandomColors();
+
+  if (event.code.toLowerCase() === 'space') {
+    setRandomColors();
+  }
 });
 
-document.addEventListener('click', event => {
-  const {type} = event.target.dataset;
+document.addEventListener('click', (event) => {
+  const target = event.target;
+  const type = target.dataset.type;
 
   if (type === 'lock') {
-    const node = event.target.tagName.toLowerCase() === 'i' ? event.target : event.target.children[0];
-
+    const node = target.tagName.toLowerCase() === 'i' ? target : target.children[0];
     node.classList.toggle('fa-lock-open');
     node.classList.toggle('fa-lock');
   } else if (type === 'copy') {
-    copyByClick(event.target.textContent);
+    copyByClick(target.textContent);
   }
-})
+});
 
 function generateRandomColor() {
   const codes = '123456789ABCDEF';
+  const codesLength = codes.length;
   const colorLength = 6;
   let color = '';
+
   for (let i = 0; i < colorLength; i++) {
-    const { length } = codes;
-    const randomIndex = Math.floor(Math.random() * length);
+    const randomIndex = Math.floor(Math.random() * codesLength);
     color += codes[randomIndex];
   }
   return '#' + color;
 }
 
-const colors = [];
+function copyByClick(text) {
+  return navigator.clipboard.writeText(text);
+}
 
-function setRandomColors() {
+function setRandomColors(isInitial) {
+  const colors = isInitial ? getColorsFromHash() : [];
+
   for (let column of columns) {
+    let index = 0;
     const isLocked = column.querySelector('i').classList.contains('fa-lock');
     const colorName = column.querySelector('h2');
     const button = column.querySelector('button');
-    const generatedColor = generateRandomColor();
 
     if (isLocked) {
       colors.push(colorName.textContent);
       return;
-    } else colors.push(generatedColor);
+    }
 
-    colorName.textContent = generatedColor;
-    column.style.background = generatedColor;
+    const color = isInitial ? (colors[index] ? colors[index] : chroma.random()) : chroma.random();
+    if (!isInitial) {
+      colors.push(color)
+    }
 
-    setTextColor(colorName, generatedColor);
-    setTextColor(button, generatedColor);
+    colorName.textContent = color;
+    column.style.background = color;
+
+    setTextColor(colorName, color);
+    setTextColor(button, color);
+    index++;
   }
 
   updateColorsHash(colors);
@@ -59,21 +73,18 @@ function setTextColor(text, color) {
   text.style.color = luminance > 0.5 ? 'black' : 'white';
 }
 
-function copyByClick(text) {
-  return navigator.clipboard.writeText(text);
-}
-
-function updateColorsHash() {
+function updateColorsHash(colors = []) {
   document.location.hash = colors.map((column) => {
     return column.toString().substring(1);
   }).join('-');
 }
 
 function getColorsFromHash() {
-  if (document.location.hash.length > 1) {
-    return document.location.hash.substring(1).split('-').map((generatedColor) => { '#' + generatedColor});
+  const hash = document.location.hash;
+  if (hash.length > 1) {
+    return hash.substring(1).split('-').map((color) => { '#' + color});
   }
   return [];
 }
 
-setRandomColors();
+setRandomColors(true);
